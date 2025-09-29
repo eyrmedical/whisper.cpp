@@ -78,7 +78,7 @@ void stream_main(size_t index) {
     }
 
     const bool is_multilingual = whisper_is_multilingual(ctx);
-    const int64_t window_samples = 5 * WHISPER_SAMPLE_RATE;
+    const int64_t window_samples = 15 * WHISPER_SAMPLE_RATE; // 15 second rolling window for richer context
 
     stream_set_status(index, "waiting for audio ...");
 
@@ -116,15 +116,15 @@ void stream_main(size_t index) {
         wparams.n_threads        = std::min(N_THREAD, (int) std::thread::hardware_concurrency());
         wparams.offset_ms        = 0;
         wparams.translate        = false;
-        wparams.no_context       = true;
-        wparams.single_segment   = true;
+        wparams.no_context       = false;
+        wparams.single_segment   = false;
         wparams.print_realtime   = false;
         wparams.print_progress   = false;
         wparams.print_timestamps = true;
         wparams.print_special    = false;
-        wparams.max_tokens       = 32;
-        wparams.audio_ctx        = 768; // partial encoder context for better performance
-        wparams.temperature_inc  = -1.0f;
+        wparams.max_tokens       = 128;
+        wparams.audio_ctx        = 0;   // use full encoder context
+        wparams.temperature_inc  = 0.2f; // enable fallback decoding when confidence is low
         wparams.language         = lang_selected.empty() ? nullptr : lang_selected.c_str();
 
         stream_set_status(index, "running whisper ...");

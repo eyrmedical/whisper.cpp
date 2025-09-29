@@ -31,7 +31,7 @@ endif()
 set_target_properties(${TARGET} PROPERTIES LINK_FLAGS " \
     --bind \
     -s USE_PTHREADS=1 \
-    -s PTHREAD_POOL_SIZE_STRICT=0 \
+    -s PTHREAD_POOL_SIZE=8 \
     -s INITIAL_MEMORY=1024MB \
     -s TOTAL_MEMORY=1024MB \
     -s MAXIMUM_MEMORY=4096MB \
